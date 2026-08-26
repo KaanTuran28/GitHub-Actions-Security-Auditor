@@ -1,0 +1,22 @@
+name: Insecure CI
+on: [pull_request_target, pull_request]
+
+permissions: write-all
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Build with third-party action
+        uses: some-org/some-build-action@v1
+
+      - name: Print issue title
+        run: echo "Building for issue ${{ github.event.issue.title }}"
+
+      - name: Debug secret
+        run: echo "Token is ${{ secrets.DEPLOY_TOKEN }}"

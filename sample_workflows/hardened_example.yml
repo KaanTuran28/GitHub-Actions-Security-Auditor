@@ -1,0 +1,27 @@
+name: Hardened CI
+on: [pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build with pinned third-party action
+        uses: some-org/some-build-action@1111111111111111111111111111111111111111
+
+      - name: Print issue title safely
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: echo "Building for issue $ISSUE_TITLE"
+
+      - name: Use secret safely
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: ./deploy.sh
